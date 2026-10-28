@@ -1,6 +1,6 @@
 # Register arhitekturnih odločitev
 
-ADR formalizirajo vseh 12 odločitev iz razdelka »Pomembne arhitekturne odločitve« v [prvi nalogi](../04-arhitektura-in-tehnoloski-sklad.md). Status `accepted` pomeni sprejet načrt, ne že izvedene implementacije. Datum 2026-10-28 označuje zapis odločitev v ADR.
+ADR 12 odločitev iz »Pomembne arhitekturne odločitve« v [prvi nalogi](../04-arhitektura-in-tehnoloski-sklad.md). Status `accepted` pomeni sprejet načrt, ne že izvedene implementacije. Datum 2026-10-28 označuje zapis odločitev v ADR.
 
 | ADR | Odločitev |
 | --- | --- |
@@ -16,13 +16,3 @@ ADR formalizirajo vseh 12 odločitev iz razdelka »Pomembne arhitekturne odloči
 | 0010 | [Odobritev nad 500 EUR brez rezervacije sredstev](0010-odobritveni-prag-brez-rezervacije.md) |
 | 0011 | [Pravice glede na sistemsko vlogo in konkretni vir](0011-pravice-glede-na-vlogo-in-vir.md) |
 | 0012 | [Omejen MVP brez delnih poravnav in samodejnega pobota](0012-omejen-mvp.md) |
-
-## Dodajanje in nadomeščanje
-
-1. Kopirajte [predlogo](adr-template.md) v naslednjo prosto številko `NNNN-kratek-naslov.md`; številk ne uporabljajte ponovno.
-2. Zapišite kontekst, realne alternative, izbiro z razlogi in obe vrsti posledic. Predlog ima status `proposed`.
-3. ADR preglejte v pull requestu skupaj s povezano spremembo; ob sprejetju nastavite `accepted` in datum odločitve. Zavrnjen predlog ima `rejected`.
-4. Ob spremembi sprejete odločitve ustvarite nov ADR in v njem povežite »Nadomešča«. Starega ohranite, nastavite status `superseded` in dodajte »Nadomeščen z« s povezavo na novi zapis. Prvotne utemeljitve ne prepisujte.
-5. Posodobite ta register in povezave v zasnovi.
-
-Oblika sledi [MADR](https://adr.github.io/madr/#applying-madr-to-your-project) in njegovi [minimalni predlogi](https://github.com/adr/madr/blob/develop/template/adr-template-minimal.md); naslovi so prevedeni v slovenščino.
