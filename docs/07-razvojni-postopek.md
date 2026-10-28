@@ -26,7 +26,10 @@ Po shranjevanju preverite nastavitve z dejanskim pull requestom iz razvojne veje
 
 ## Evidenca preverjanja
 
-Povezava do izvedenega pull requesta in rezultat bosta dodana po nastavitvi oddaljenega repozitorija. Ta dokument sam ne dokazuje, da je zaščita na GitHubu vključena.
+- Repozitorij: [JakaM1/MiniBank](https://github.com/JakaM1/MiniBank), javni, lokalno kloniran v mapo `projekt`.
+- Dne 28. 10. 2026 je bilo shranjeno pravilo zaščite `main` z zgoraj navedenimi nastavitvami; GitHub je potrdil »Branch protection rule created«.
+- Preverjanje poteka s [pull requestom #1](https://github.com/JakaM1/MiniBank/pull/1), iz `docs/priprava-repozitorija` v `main`. Njegova časovnica pokaže končni rezultat združitve in služi kot dokaz izvedenega postopka.
+- Preverjene so vse relativne povezave Markdown, obvezni razdelki vseh 12 ADR in `git diff --check`. Aplikacijskih testov še ni, ker implementacija še ni pripravljena.
 
 ## Viri
 
