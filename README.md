@@ -1,34 +1,50 @@
 # MiniBank
 
-MiniBank je učna spletna simulacija bančnega okolja s poudarkom na skupnostnem bančništvu. Poveže skupino, razdelitev že plačanega stroška, soglasje udeležencev in poravnavo potrjene obveznosti z internim nakazilom. Skupina nima svojega bančnega računa. Aplikacija uporablja izmišljene podatke in EUR.
+Učna simulacija skupnostnega bančništva z izmišljenimi podatki in EUR.
 
-## Stanje projekta
+Implementirani so prijava, odjava, strežniške seje, CSRF ter pregled lastnih računov in zadnjih 20 izvedenih nakazil. Nakazila, skupine, stroški, obveznosti in upravljanje dostopov sledijo v naslednjih iteracijah.
 
-Repozitorij vsebuje zasnovo, uporabniške zgodbe, žične modele in arhitekturne odločitve. Implementacija še ni pripravljena; mapi `frontend/` in `backend/` vsebujeta samo `.gitkeep`.
+[MVP Board](https://github.com/users/JakaM1/projects/3) · [Načrt in preverjanje](docs/08-implementacija-mvp.md) · [Uporabniške zgodbe](docs/05-uporabniske-zgodbe.md) · [Arhitektura](docs/04-arhitektura-in-tehnoloski-sklad.md) · [ADR](docs/adr/README.md)
 
-## Načrtovane tehnologije
+## Lokalni zagon
 
-- Frontend: React, TypeScript, Vite, HTML in CSS; Node.js 22 in npm.
-- Backend: C#, .NET 10, ASP.NET Core Web API.
-- Podatki: PostgreSQL 17, EF Core 10 in združljiv Npgsql.
-- Dostop: strežniške seje, Cookie Authentication in CSRF zaščita.
-- Razvoj in preverjanje: Docker Compose, Git, xUnit, WebApplicationFactory, Testcontainers in Vitest.
+Potrebujete .NET SDK 10.0.100 (ali novejši popravek 10.0.1xx), Node.js 22.14+ in Docker Compose z delujočim pogonom. Ukaze izvajajte v korenu repozitorija.
 
-Točne združljive različice bodo zaklenjene pred implementacijo. Podrobnosti in načrt zagona so v [arhitekturi](docs/04-arhitektura-in-tehnoloski-sklad.md).
+1. Kopirajte `.env.example` v `.env` in nastavite lokalno geslo baze.
+2. Zaženite bazo in pripravite konfiguracijo. V povezovalnem nizu uporabite isto geslo kot v `.env`; `Seed:Password` je vaše lokalno demonstracijsko geslo z vsaj 12 znaki.
 
-## Dokumentacija
+```sh
+docker compose up -d db
+dotnet tool restore
+dotnet restore --locked-mode --configfile NuGet.Config
+dotnet user-secrets set "ConnectionStrings:MiniBank" "Host=localhost;Database=minibank;Username=minibank;Password=VASE_GESLO_BAZE" --project backend/MiniBank.Api
+dotnet user-secrets set "Seed:Password" "VASE_DEMONSTRACIJSKO_GESLO" --project backend/MiniBank.Api
+dotnet user-secrets set "Seed:Enabled" "true" --project backend/MiniBank.Api
+dotnet ef database update --project backend/MiniBank.Api
+dotnet run --project backend/MiniBank.Api --launch-profile Development
+```
 
-1. [Zasnova rešitve](docs/01-zasnova-resitve.md)
-2. [Funkcionalnosti in obseg](docs/02-funkcionalnosti-in-obseg.md)
-3. [Podatkovni model](docs/03-podatkovni-model.md)
-4. [Arhitektura in tehnološki sklad](docs/04-arhitektura-in-tehnoloski-sklad.md)
-5. [Uporabniške zgodbe](docs/05-uporabniske-zgodbe.md)
-6. [Žični modeli](docs/06-wireframes.md)
-7. [Arhitekturne odločitve – register ADR](docs/adr/README.md)
-8. [GitHub Flow in preverjanje zaščite](docs/07-razvojni-postopek.md)
+3. V drugem terminalu:
 
-Dokumenti 01–04 izvirajo iz prve naloge, 05–06 in PNG iz druge; ob prenosu so usklajene relativne povezave in imena slik.
+```sh
+cd frontend
+npm ci
+npm run dev
+```
 
-## Razvoj
+Odprite [localhost:5173](http://localhost:5173). Razvojni inicializator samo v prazni bazi pripravi `ana@minibank.test`, `bor@minibank.test`, `cene@minibank.test`, `usluzbenec@minibank.test` in `admin@minibank.test` z vašim `Seed:Password`. Komitenti dobijo po 200 EUR. Zgodovina nakazil je sprva prazna. Uslužbenec in administrator imata za zdaj začetni zaslon brez poslovnih dejanj.
 
-Uporabljamo [GitHub Flow](https://docs.github.com/en/get-started/using-github/github-flow): kratka razvojna veja, pregledljiv commit, pull request v `main`, preverjanje in združitev. Pomembno novo odločitev dokumentiramo z novim ADR. Lokalnih gesel, `.env` in povezovalnih nizov ne vključujemo v Git.
+Ponovni zagon API zahteva novo prijavo in ohrani podatke. `docker compose stop` ohrani bazo. Namesto Dockerja lahko uporabite lokalni PostgreSQL 17 in prilagodite povezovalni niz. Backend `.env` ne bere; uporablja user-secrets ali okoljske spremenljivke.
+
+## Preverjanje in razvoj
+
+```sh
+dotnet test
+cd frontend
+npm test
+npm run build
+```
+
+API testi privzeto uporabljajo izolirano SQLite bazo. Z okoljsko spremenljivko `MINIBANK_TEST_POSTGRES` (povezovalni niz lokalne testne baze in uporabnik s pravico `CREATEDB`) iste teste izvedete na PostgreSQL; za vsak test se ustvari in odstrani ločena baza `minibank_tests_*`. CI preveri oba ponudnika in migracije. Sprejemni scenariji so v [evidenci](docs/08-implementacija-mvp.md).
+
+Za vsako spremembo ustvarite razvojno vejo in PR z opisom, preverjanji ter `Closes #številka`. Nalogo premaknite `To Do` → `Doing` → `Done` po uspešnem preverjanju in združitvi. Podrobnosti: [GitHub Flow](docs/07-razvojni-postopek.md). Lokalnih gesel in `.env` ne vključujte v Git.

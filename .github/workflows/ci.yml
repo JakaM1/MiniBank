@@ -1,0 +1,43 @@
+name: Preverjanje
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.6
+        env:
+          POSTGRES_USER: minibank
+          POSTGRES_PASSWORD: ci-local-password
+          POSTGRES_DB: minibank
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U minibank" --health-interval 5s
+          --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: dotnet tool restore
+      - run: dotnet restore --locked-mode --configfile NuGet.Config
+      - run: dotnet test --no-restore
+      - run: dotnet test --no-build --no-restore
+        env:
+          MINIBANK_TEST_POSTGRES: Host=localhost;Database=minibank;Username=minibank;Password=ci-local-password
+      - run: dotnet ef database update --no-build --project backend/MiniBank.Api
+        env:
+          ConnectionStrings__MiniBank: Host=localhost;Database=minibank;Username=minibank;Password=ci-local-password
+      - run: npm ci
+        working-directory: frontend
+      - run: npm test
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend

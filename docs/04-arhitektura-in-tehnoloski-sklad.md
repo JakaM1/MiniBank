@@ -2,7 +2,7 @@
 
 ## Glavni deli sistema
 
-MiniBank bo **modularni monolit** z enim backendom, enim spletnim odjemalcem in eno relacijsko bazo. Poslovni moduli so ločeni v kodi, vendar sodelujejo v isti podatkovni transakciji. Dokument je načrt implementacije; repozitorij trenutno vsebuje dokumentacijo in žične modele, ne delujoče aplikacije.
+MiniBank je načrtovan kot **modularni monolit** z enim backendom, enim spletnim odjemalcem in eno relacijsko bazo. Poslovni moduli bodo sodelovali v isti podatkovni transakciji. Dokument opisuje ciljno arhitekturo; trenutno izvedeno prvo iteracijo in dejanski zagon določata [README](../README.md) ter [evidenca MVP](08-implementacija-mvp.md).
 
 1. **Frontend:** React in TypeScript za račune, skupine, stroške, potrjevanje deležev, obveznosti, poravnave ter ločena pogleda uslužbenca in administratorja.
 2. **REST API:** ASP.NET Core; vhodni DTO, validacija, seja, CSRF in preverjanje sistemske vloge ter pravice na konkretnem viru. Entitet baze se ne vrača neposredno.
