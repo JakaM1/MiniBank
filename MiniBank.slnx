@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/backend/">
+    <Project Path="backend/MiniBank.Api/MiniBank.Api.csproj" />
+    <Project Path="backend/MiniBank.Tests/MiniBank.Tests.csproj" />
+  </Folder>
+</Solution>
